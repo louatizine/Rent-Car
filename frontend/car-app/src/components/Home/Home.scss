@@ -1,0 +1,178 @@
+:root {
+    --primaryColor: #7a63f1;
+    --secondaryColor: #ebe8fc;
+    --textColor: #a3a3a3;
+    --greyColor: #f4f4f4;
+    --whiteColor: #f5f4fa;
+    --blackColor: #434344;
+}
+
+.home {
+    padding-top: 8rem;
+}
+
+.seeContainer {
+    padding: 0 1.5;
+    text-align: center;
+    display: grid;
+    gap: 1rem;
+
+    .homeText {
+        .homeSpan {
+            font-size: 15px;
+            color: var(--textColor);
+            font-weight: 400;
+        }
+
+        .homeTitle {
+            color: var(--blackColor);
+            font-weight: 700;
+            font-size: 30px;
+
+        }
+
+        .btns {
+            gap: .5rem;
+            justify-content: center;
+
+            .btn {
+                padding: 10px 15px;
+                border-radius: 3px;
+                font-weight: 600;
+                margin-top: 2rem;
+                font-size: 12px;
+
+                &:hover {
+                    background: var(--primaryColor);
+                    color: var(--whiteColor);
+                }
+            }
+
+            .btn:nth-child(1) {
+                background: var(--whiteColor);
+                color: var(--textColor);
+
+                &:hover {
+                    background: var(--primaryColor);
+                    color: var(--whiteColor);
+                }
+            }
+
+
+            .btn:nth-child(2) {
+
+                &:hover {
+                    background: var(--whiteColor);
+                    color: var(--textColor);
+                }
+            }
+        }
+    }
+
+    .homeImage{
+        margin: auto;
+        
+    }
+
+}
+
+
+// responsiveness
+
+@media screen and (min-width:520px) {
+    .home{
+        .seeContainer{
+            .homeText{
+                .homeSpan{
+                    font-size: 18px;
+                }
+                .homeTitle{
+                    font-size: 30px;
+                }
+
+                .btns{
+                    .btn{
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            .homeImage{
+                max-width: 85%;
+            }
+        }
+    }
+}
+
+@media screen and (min-width:770px) {
+    .home{
+        padding-top: 12rem;
+        .seeContainer{
+            gap: 3rem;
+            .homeText{
+                .homeSpan{
+                    font-size: 25px;
+                }
+                .homeTitle{
+                    font-size: 55px;
+                }
+
+                .btns{
+                    .btn{
+                        font-size: 16px;
+                        padding: 1rem 2rem;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (min-width:996px) {
+    .home{
+        padding-top: 10rem;
+        .seeContainer{
+            gap: 2.5rem;
+            .homeText{
+                .homeSpan{
+                    font-size: 21px;
+                }
+                .homeTitle{
+                    font-size: 45px;
+                }
+
+                .btns{
+                    margin-top: 1rem;
+                }
+            }
+        }
+    }
+}
+
+
+
+/* Your existing CSS */
+
+/* AOS Animations */
+[data-aos] {
+    opacity: 0;
+    transition-duration: 1000ms; /* Adjust the duration as needed */
+}
+
+[data-aos='fade-up'] {
+    transform: translateY(50px);
+}
+
+[data-aos='fade-down-right'] {
+    transform: translateX(100px) translateY(100px);
+}
+
+/* Ensure the elements become visible when scrolled to */
+[data-aos][data-aos^='fade'] {
+    will-change: opacity, transform;
+}
+
+/* Ensure the elements are visible if they are within the viewport */
+[data-aos].aos-animate {
+    opacity: 1;
+    transform: none;
+}
