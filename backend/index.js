@@ -3,10 +3,12 @@ require("dotenv").config();
 const config = require("./config.json");
 const mongoose = require("mongoose");
 
-mongoose.connect(config.connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGODB_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+})
+.then(() => console.log("MongoDB connected"))
+.catch(err => console.error("MongoDB connection error:", err));
 
 const User = require("./models/UserModel");
 const Car = require('./models/CarModel');
@@ -26,60 +28,70 @@ app.use(
   })
 );
 
+
+
+
+
+
 app.post("/create-account", async (req, res) => {
-    const { fullname, email, password, role } = req.body;
-  
-    if (!fullname) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Full name is required" });
-    }
-    if (!email) {
-      return res.status(400).json({ error: true, message: "Email is required" });
-    }
-    if (!password) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Password is required" });
-    }
-    if (!role || !['client', 'agency'].includes(role)) {
-      return res.status(400).json({ error: true, message: "Invalid role" });
-    }
-  
-    // Check if user already exists
-    const isUser = await User.findOne({ email });
-    if (isUser) {
-      return res.json({
-        error: true,
-        message: "User already exists",
-      });
-    }
-  
-    // Create new user
-    const user = new User({
-      fullname,
-      email,
-      password,
-      role,
+  const { fullname, email, password, role } = req.body;
+
+  // Validate input
+  if (!fullname) {
+    return res.status(400).json({ error: true, message: "Full name is required" });
+  }
+  if (!email) {
+    return res.status(400).json({ error: true, message: "Email is required" });
+  }
+  if (!password) {
+    return res.status(400).json({ error: true, message: "Password is required" });
+  }
+  if (!role || !['client', 'agency'].includes(role)) {
+    return res.status(400).json({ error: true, message: "Invalid role" });
+  }
+
+  // Check if user already exists
+  const isUser = await User.findOne({ email });
+  if (isUser) {
+    return res.status(400).json({
+      error: true,
+      message: "User already exists",
     });
-    await user.save();
-  
-    // Create a JWT token
-    const accessToken = jwt.sign(
-      { userId: user._id, role: user.role }, // Include role in the token
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "36000m" }
-    );
-  
-    // Respond with the user data and token
-    return res.json({
-      error: false,
-      user,
-      accessToken,
-      message: "Registered successfully",
-    });
+  }
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Create new user
+  const user = new User({
+    fullname,
+    email,
+    password: hashedPassword,
+    role,
   });
-  
+
+  try {
+    await user.save();
+  } catch (error) {
+    console.error("Error saving user to database:", error);
+    return res.status(500).json({
+      error: true,
+      message: "An error occurred while saving the user.",
+    });
+  }})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
