@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const config = require("./config.json");
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt'); 
 
 mongoose.connect(process.env.MONGODB_URI, { 
   useNewUrlParser: true, 
@@ -79,17 +80,6 @@ app.post("/create-account", async (req, res) => {
       message: "An error occurred while saving the user.",
     });
   }})
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -43,7 +43,7 @@ const SignupForm = () => {
 
       const data = await response.json();
 
-      if (!response.ok) { // Check if response is not OK
+      if (!response.ok) {
         toast({
           title: "Error",
           description: data.message || "An unexpected error occurred.",
@@ -51,9 +51,10 @@ const SignupForm = () => {
           duration: 3000,
           isClosable: true,
         });
-        return; // Stop execution if there's an error
+        return;
       }
 
+      // Show success toast and reset form fields
       toast({
         title: "Success",
         description: "Account created successfully!",
@@ -67,6 +68,7 @@ const SignupForm = () => {
       setEmail('');
       setPassword('');
       setRole('client');
+
     } catch (error) {
       toast({
         title: "Error",
