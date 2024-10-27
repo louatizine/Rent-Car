@@ -23,7 +23,7 @@ import {
           <Box>
             <Link as={RouterLink} to="/">
               <Image
-                src="../../Assests/" 
+                src="../../../publ" 
                 alt="YourLogo"
                 boxSize="50px"
                 objectFit="cover"
@@ -45,7 +45,7 @@ import {
             <Link as={RouterLink} to="/">
               Home
             </Link>
-            <Link as={RouterLink} to="/services">
+            <Link as={RouterLink} to="/Services">
               Services
             </Link>
             <Link as={RouterLink} to="/contactus">

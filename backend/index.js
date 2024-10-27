@@ -83,41 +83,72 @@ app.post("/create-account", async (req, res) => {
 
 
 
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ message: "Email is required" });
-  }
-  if (!password) {
-    return res.status(400).json({ message: "Password is required" });
-  }
 
-  const userInfo = await User.findOne({ email });
-  if (!userInfo) {
-    return res.status(400).json({ message: "User not found!" });
-  }
 
-  if (userInfo.email === email && userInfo.password === password) {
-    const accessToken = jwt.sign(
-      { userId: userInfo._id }, // Make sure userInfo._id is defined
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "36000m" }
-    );
 
-    return res.json({
-      error: false,
-      message: "Login successfully",
-      email,
-      accessToken,
-    });
-  } else {
-    return res.status(400).json({
-      error: true,
-      message: "Invalid credentials",
-    });
-  }
-});
+  app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    console.log('Received login request:', { email, password });
+  
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+  
+    const userInfo = await User.findOne({ email });
+    console.log('User found in DB:', userInfo);
+  
+    if (!userInfo) {
+      return res.status(400).json({ message: "User not found!" });
+    }
+  
+    // Use bcrypt to compare the entered password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(password, userInfo.password);
+    
+    if (passwordMatch) {
+      const accessToken = jwt.sign(
+        { userId: userInfo._id, role: userInfo.role },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "10h" }
+      );
+  
+      console.log('Generated token:', accessToken);
+  
+      return res.json({
+        error: false,
+        message: "Login successfully",
+        email,
+        role: userInfo.role,
+        accessToken,
+      });
+    } else {
+      console.log('Invalid credentials for:', { email, password });
+      return res.status(400).json({
+        error: true,
+        message: "Invalid credentials",
+      });
+    }
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.get("/get-users", authentificateToken, async (req, res) => {
     try {
       const users = await User.find();

@@ -8,13 +8,13 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');        
-  const [password, setPassword] = useState('');  
-  const toast = useToast();                     
-  const navigate = useNavigate(); // Use React Router's useNavigate
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const toast = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +31,9 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/login', { 
+      console.log('Sending login request:', { email, password }); // Debugging line
+
+      const response = await fetch('http://localhost:8000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,8 +42,9 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
+      console.log('Received response:', data); // Debugging line
 
-      if (!response.ok) { // If login fails
+      if (!response.ok) {
         toast({
           title: "Error",
           description: data.message || "An unexpected error occurred.",
@@ -52,7 +55,6 @@ const LoginForm = () => {
         return;
       }
 
-      // Show success toast if login is successful
       toast({
         title: "Success",
         description: "Login successful!",
@@ -61,14 +63,19 @@ const LoginForm = () => {
         isClosable: true,
       });
 
-      // Store the accessToken in localStorage for further API requests
       localStorage.setItem('accessToken', data.accessToken);
 
-      // Redirect to the home page after successful login
-      navigate("/Home"); // Redirects to the home page
-      
-    // eslint-disable-next-line no-unused-vars
+      if (data.role === 'agency') {
+        navigate('/agency');
+      } else if (data.role === 'client') {
+        console.log(data.role);
+        navigate('/allusers');
+      } else {
+        navigate('/home'); 
+      }
+
     } catch (error) {
+      console.error('Error during login:', error); // Debugging line
       toast({
         title: "Error",
         description: "An error occurred during login.",
