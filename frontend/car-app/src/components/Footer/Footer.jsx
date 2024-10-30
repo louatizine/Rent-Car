@@ -17,8 +17,15 @@ import {
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
+import img1 from '../Assests/car1.png';
+import img2 from '../Assests/car1.png';
+import img3 from '../Assests/car1.png';
+import img4 from '../Assests/car1.png';
 
 const Footer = () => {
+  // Move images array declaration outside of the return statement
+  const images = [img1, img2, img3, img4]; // Array of imported images
+
   return (
     <>
       <Box
@@ -109,7 +116,7 @@ const Footer = () => {
                   Private Policy
                 </Button>
                 <Button variant="link" color="white" href="#">
-                  Term & Conditions
+                  Terms & Conditions
                 </Button>
                 <Button variant="link" color="white" href="#">
                   New Member Registration
@@ -130,8 +137,6 @@ const Footer = () => {
               <Heading as="h4" size="md" color="white" mb={4}>
                 Car Gallery
               </Heading>
-
-
               <Grid
                 templateColumns={{
                   base: "repeat(2, 1fr)",
@@ -139,24 +144,18 @@ const Footer = () => {
                 }}
                 gap={2}
               >
-                {[1, 2, 3, 4, 5, 6].map((num) => (
-                  <Box key={num}>
+                {images.map((img, index) => (
+                  <Box key={index}>
                     <Image
-                      /*                       src={`img/gallery-${num}.jpg`}
-
- */
-                      src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReNH5jn_0kTTlKJgl8bymWfvwJdhAj_xUUUA&s-${num}.jpg`}
-                      alt={`Gallery Image ${num}`}
-                      width="100%"
+                      src={img}
+                      alt={`Gallery Image ${index + 1}`}
+                      width="100%" // Use 100% width for better responsiveness
+                      height="auto" // Set height to auto to maintain aspect ratio
                       borderRadius="md"
                     />
                   </Box>
                 ))}
               </Grid>
-
-
-
-              
             </Box>
 
             <Box>

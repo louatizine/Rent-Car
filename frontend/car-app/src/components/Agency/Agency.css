@@ -1,0 +1,92 @@
+/* Agency.css */
+
+.team {
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 1200px; /* or any width you prefer */
+    margin: 0 auto;
+  }
+  
+  .content {
+    display: flex; /* Use flexbox */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
+    justify-content: space-between; /* Distribute space between items */
+  }
+  
+  .box {
+    flex: 1 1 calc(25% - 20px); /* Each box takes up to 25% of the container width minus some margin */
+    margin: 10px; /* Add margin around each box */
+    background: #f9f9f9; /* Optional: Add a background color */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    overflow: hidden; /* Prevent overflow of content */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+    transition: transform 0.3s; /* Optional: Add transition for hover effects */
+  }
+  
+  .box:hover {
+    transform: translateY(-5px); /* Optional: Slightly lift the box on hover */
+  }
+  
+  .img img {
+    width: 100%; /* Ensure the image takes full width */
+    border-radius: 8px 8px 0 0; /* Rounded corners for the top */
+  }
+  
+  .details {
+    padding: 15px; /* Add some padding */
+  }
+  
+  /* Icon styles */
+  .details ul {
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+    display: flex; /* Align icons in a row */
+    gap: 10px; /* Add space between icons */
+  }
+  
+  .details ul li {
+    color: #007bff; /* Example: blue color for icons */
+    font-size: 1.5rem; /* Adjust icon size */
+  }
+  
+  /* Button styles */
+  .btn3 {
+    background-color: #28a745; /* Green background for button */
+    color: white; /* White text color */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s; /* Smooth background transition */
+  }
+  
+  .btn3:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  .button button {
+    background-color: #007bff; /* Example: blue for message button */
+    color: white; /* White text color */
+    border: none; /* No border */
+    padding: 10px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s; /* Smooth background transition */
+    margin-right: 5px; /* Space between buttons */
+  }
+  
+  .button button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .btn4 {
+    background-color: #ffc107; /* Yellow for phone button */
+    color: white; /* White text color */
+  }
+  
+  .btn4:hover {
+    background-color: #e0a800; /* Darker yellow on hover */
+  }
+  

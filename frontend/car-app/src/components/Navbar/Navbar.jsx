@@ -12,7 +12,7 @@ import {
   } from '@chakra-ui/react';
   import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
   import { Link as RouterLink } from 'react-router-dom';
-  
+  import logo from "./ZineLogo.png"
   const Navbar = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
   
@@ -23,7 +23,7 @@ import {
           <Box>
             <Link as={RouterLink} to="/">
               <Image
-                src="../../../publ" 
+                src={logo}
                 alt="YourLogo"
                 boxSize="50px"
                 objectFit="cover"

@@ -42,7 +42,7 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
-      console.log('Received response:', data); // Debugging line
+      console.log('Received response:', data);
 
       if (!response.ok) {
         toast({

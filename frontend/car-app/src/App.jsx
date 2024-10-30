@@ -12,6 +12,7 @@ import Home from './components/Home/Home';
 import ContactUs from './components/Contact/Contact';
 import VendorCarousel from './components/Sponsors/SponsorCarrousel';
 import Footer from './components/Footer/Footer';
+import Agency from './components/Agency/Agency';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function MainContent() {
         <>
           <Home />
           <Services />
+          <Agency/>
           <ContactUs />
           <VendorCarousel />
           <Footer />

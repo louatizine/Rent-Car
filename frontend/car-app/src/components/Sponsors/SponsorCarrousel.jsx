@@ -1,6 +1,14 @@
 import { Box, Container, Image } from "@chakra-ui/react";
 import Slider from "react-slick";
 
+// Import images from the local folder
+import img1 from '../Assests/logoTwo.png';
+import img2 from '../Assests/logoThree.png';
+import img3 from '../Assests/logoOne.png';
+import img4 from '../Assests/logoFour.png';
+
+
+
 const VendorCarousel = () => {
   const settings = {
     dots: true,
@@ -26,22 +34,23 @@ const VendorCarousel = () => {
     ],
   };
 
+  const images = [img1, img2, img3, img4]; // Array of imported images
+
   return (
     <Box py={5} bg="gray.50">
       <Container py={5}>
         <Slider {...settings} className="vendor-carousel">
-          {[1, 2, 3, 4, 5, 6].map((num) => (
-            <Box key={num}>
+          {images.map((img, index) => (
+            <Box key={index}>
               <Image
-                /* src={`img/gallery-${num}.jpg`}*/
-                src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReNH5jn_0kTTlKJgl8bymWfvwJdhAj_xUUUA&s-${num}.jpg`}
-                alt={`Gallery Image ${num}`}
-                width="100%"
+                src={img}
+                alt={`Gallery Image ${index + 1}`}
+                width="40%"
+                height="30%"
                 borderRadius="md"
               />
             </Box>
           ))}
-          <img src="" alt="Vendor 8" />{" "}
         </Slider>
       </Container>
     </Box>
