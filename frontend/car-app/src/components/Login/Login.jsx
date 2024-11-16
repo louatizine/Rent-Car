@@ -66,7 +66,7 @@ const LoginForm = () => {
       localStorage.setItem('accessToken', data.accessToken);
 
       if (data.role === 'agency') {
-        navigate('/agency');
+        navigate('/addv');
       } else if (data.role === 'client') {
         console.log(data.role);
         navigate('/allusers');

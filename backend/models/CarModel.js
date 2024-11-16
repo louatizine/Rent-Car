@@ -57,6 +57,9 @@ const carSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+
+
+
 });
 
 module.exports = mongoose.model("Car", carSchema);

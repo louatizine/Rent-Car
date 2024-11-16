@@ -1,18 +1,21 @@
 require("dotenv").config();
+const multer = require("multer");
+const path = require("path");
 
 const config = require("./config.json");
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt'); 
+const bcrypt = require("bcrypt");
 
-mongoose.connect(process.env.MONGODB_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.error("MongoDB connection error:", err));
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 const User = require("./models/UserModel");
-const Car = require('./models/CarModel');
+const Car = require("./models/CarModel");
 
 const express = require("express");
 const cors = require("cors");
@@ -29,25 +32,35 @@ app.use(
   })
 );
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
 
-
-
-
+const upload = multer({ storage: storage });
 
 app.post("/create-account", async (req, res) => {
   const { fullname, email, password, role } = req.body;
 
   // Validate input
   if (!fullname) {
-    return res.status(400).json({ error: true, message: "Full name is required" });
+    return res
+      .status(400)
+      .json({ error: true, message: "Full name is required" });
   }
   if (!email) {
     return res.status(400).json({ error: true, message: "Email is required" });
   }
   if (!password) {
-    return res.status(400).json({ error: true, message: "Password is required" });
+    return res
+      .status(400)
+      .json({ error: true, message: "Password is required" });
   }
-  if (!role || !['client', 'agency'].includes(role)) {
+  if (!role || !["client", "agency"].includes(role)) {
     return res.status(400).json({ error: true, message: "Invalid role" });
   }
 
@@ -79,98 +92,78 @@ app.post("/create-account", async (req, res) => {
       error: true,
       message: "An error occurred while saving the user.",
     });
-  }})
+  }
+});
 
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  console.log("Received login request:", { email, password });
 
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+  }
 
+  const userInfo = await User.findOne({ email });
+  console.log("User found in DB:", userInfo);
 
+  if (!userInfo) {
+    return res.status(400).json({ message: "User not found!" });
+  }
 
+  // Use bcrypt to compare the entered password with the hashed password in the database
+  const passwordMatch = await bcrypt.compare(password, userInfo.password);
 
+  if (passwordMatch) {
+    const accessToken = jwt.sign(
+      { userId: userInfo._id, role: userInfo.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "10h" }
+    );
 
-  app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    console.log('Received login request:', { email, password });
-  
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
-    if (!password) {
-      return res.status(400).json({ message: "Password is required" });
-    }
-  
-    const userInfo = await User.findOne({ email });
-    console.log('User found in DB:', userInfo);
-  
-    if (!userInfo) {
-      return res.status(400).json({ message: "User not found!" });
-    }
-  
-    // Use bcrypt to compare the entered password with the hashed password in the database
-    const passwordMatch = await bcrypt.compare(password, userInfo.password);
-    
-    if (passwordMatch) {
-      const accessToken = jwt.sign(
-        { userId: userInfo._id, role: userInfo.role },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "10h" }
-      );
-  
-      console.log('Generated token:', accessToken);
-  
-      return res.json({
-        error: false,
-        message: "Login successfully",
-        email,
-        role: userInfo.role,
-        accessToken,
-      });
-    } else {
-      console.log('Invalid credentials for:', { email, password });
-      return res.status(400).json({
-        error: true,
-        message: "Invalid credentials",
-      });
-    }
-  });
+    console.log("Generated token:", accessToken);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return res.json({
+      error: false,
+      message: "Login successfully",
+      email,
+      role: userInfo.role,
+      accessToken,
+    });
+  } else {
+    console.log("Invalid credentials for:", { email, password });
+    return res.status(400).json({
+      error: true,
+      message: "Invalid credentials",
+    });
+  }
+});
 
 app.get("/get-users", authentificateToken, async (req, res) => {
-    try {
-      const users = await User.find();
-  
-      return res.json({
-        error: false,
-        users: users.map(user => ({
-          fullName: user.fullname,
-          email: user.email,
-          role: user.role,   // Include role in the response
-          _id: user._id,
-          createdOn: user.createdOn,
-        })),
-        message: "Users retrieved successfully",
-      });
-    } catch (error) {
-      console.error("Error retrieving users:", error);
-      return res.status(500).json({ error: true, message: "Internal server error." });
-    }
-  });
-  
-  
+  try {
+    const users = await User.find();
+
+    return res.json({
+      error: false,
+      users: users.map((user) => ({
+        fullName: user.fullname,
+        email: user.email,
+        role: user.role, // Include role in the response
+        _id: user._id,
+        createdOn: user.createdOn,
+      })),
+      message: "Users retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error retrieving users:", error);
+    return res
+      .status(500)
+      .json({ error: true, message: "Internal server error." });
+  }
+});
+
 // Update user information
 app.put("/update-user/:userId", authentificateToken, async (req, res) => {
   const { userId } = req.params; // Get userId from URL parameter
@@ -178,12 +171,10 @@ app.put("/update-user/:userId", authentificateToken, async (req, res) => {
 
   // Ensure at least one field is provided to update
   if (!fullname && !email && !password) {
-    return res
-      .status(400)
-      .json({
-        error: true,
-        message: "At least one field is required to update.",
-      });
+    return res.status(400).json({
+      error: true,
+      message: "At least one field is required to update.",
+    });
   }
 
   try {
@@ -239,44 +230,46 @@ app.delete("/delete-user/:userId", authentificateToken, async (req, res) => {
 });
 
 // Get user by ID
-app.get("/get-user/:userId", authentificateToken, async (req, res) => {
-  const { userId } = req.params; // Get userId from URL parameter
-
+app.post("/add-car", authentificateToken, upload.array("images", 10), async (req, res) => {
   try {
-    const user = await User.findById(userId); // Find user by userId
+    console.log("Request body received:", req.body);
 
-    if (!user) {
-      return res.status(404).json({ error: true, message: "User not found." });
+    const {
+      brand,
+      model,
+      year,
+      registrationNumber,
+      transmission,
+      fuelType,
+      pricePerDay,
+      seats,
+      mileage,
+      location,
+    } = req.body;
+
+    const { userId } = req.user;
+
+    // Validate all required fields
+    if (
+      !brand ||
+      !model ||
+      !year ||
+      !registrationNumber ||
+      !transmission ||
+      !fuelType ||
+      !pricePerDay ||
+      !seats ||
+      !mileage ||
+      !location
+    ) {
+      return res
+        .status(400)
+        .json({ error: true, message: "All required fields must be filled" });
     }
 
-    return res.json({
-      error: false,
-      user: {
-        fullname: user.fullname,
-        email: user.email,
-        _id: user._id,
-        createdOn: user.createdOn,
-      },
-      message: "User retrieved successfully.",
-    });
-  } catch (error) {
-    console.error("Error retrieving user:", error);
-    return res
-      .status(500)
-      .json({ error: true, message: "Internal server error." });
-  }
-});
+    // Handle images (if any)
+    const images = req.files ? req.files.map(file => file.path) : [];
 
-app.post("/add-car", authentificateToken, async (req, res) => {
-  const { brand, model, year, registrationNumber, transmission, fuelType, pricePerDay, seats, mileage, location, features, images } = req.body;
-  const { userId } = req.user; // Access userId
-
-  // Ensure all required fields are provided
-  if (!brand || !model || !year || !registrationNumber || !transmission || !fuelType || !pricePerDay || !seats || !mileage || !location) {
-    return res.status(400).json({ error: true, message: "All required fields must be filled" });
-  }
-
-  try {
     const car = new Car({
       brand,
       model,
@@ -288,43 +281,57 @@ app.post("/add-car", authentificateToken, async (req, res) => {
       seats,
       mileage,
       location,
-      features: features || [],
-      images: images || [],
-      addedBy: userId // Save the user ID who added the car
+      images,
+      addedBy: userId,
     });
 
     await car.save();
 
-    return res.json({
-      error: false,
-      car,
-      message: "Car added successfully",
-    });
+    console.log("Car successfully added:", car);
+    return res.json({ error: false, car, message: "Car added successfully" });
   } catch (error) {
-    console.error("Error while adding car:", error); 
-    return res.status(500).json({
-      error: true,
-      message: "Internal server error"
-    });
+    console.error("Error while adding car:", error.message);
+    return res.status(500).json({ error: true, message: "Internal server error" });
   }
 });
 
-
 app.put("/edit-car/:carId", authentificateToken, async (req, res) => {
   const carId = req.params.carId;
-  const { brand, model, year, registrationNumber, transmission, fuelType, pricePerDay, seats, mileage, location, features, images, available } = req.body;
+  const {
+    brand,
+    model,
+    year,
+    registrationNumber,
+    transmission,
+    fuelType,
+    pricePerDay,
+    seats,
+    mileage,
+    location,
+    features,
+    images,
+    available,
+  } = req.body;
   const { userId } = req.user; // Get userId
 
   // Ensure user is authenticated
   if (!userId) {
-    return res.status(403).json({ error: true, message: "User not authenticated" });
+    return res
+      .status(403)
+      .json({ error: true, message: "User not authenticated" });
   }
 
   try {
     const car = await Car.findOne({ _id: carId, addedBy: userId }); // Ensure the car belongs to the user
 
     if (!car) {
-      return res.status(404).json({ error: true, message: "Car not found or you don't have permission to edit this car" });
+      return res
+        .status(404)
+        .json({
+          error: true,
+          message:
+            "Car not found or you don't have permission to edit this car",
+        });
     }
 
     // Update only the fields that are provided
@@ -350,7 +357,7 @@ app.put("/edit-car/:carId", authentificateToken, async (req, res) => {
       message: "Car updated successfully",
     });
   } catch (error) {
-    console.error("Error while updating car:", error); 
+    console.error("Error while updating car:", error);
     return res.status(500).json({
       error: true,
       message: "Server error",
@@ -358,14 +365,47 @@ app.put("/edit-car/:carId", authentificateToken, async (req, res) => {
   }
 });
 
-app.get("/get-all-cars", authentificateToken, async (req, res) => {
+
+
+/* app.get("/get-all-cars", authentificateToken, async (req, res) => {
   try {
     const cars = await Car.find().sort({ createdOn: -1 }); // Fetch all cars sorted by creation date
 
     return res.json({
       error: false,
       cars,
-      message: "All cars retrieved successfully"
+      message: "All cars retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error while fetching cars:", error);
+    return res.status(500).json({
+      error: true,
+      message: "Server error",
+    });
+  }
+}); */
+
+/* get own cars */
+
+
+app.get("/get-all-cars", authentificateToken, async (req, res) => {
+  try {
+    const userId = req.user._id;  // Assuming user ID is stored in the token
+
+    // Fetch only cars added by the logged-in user
+    const cars = await Car.find({ userId }).sort({ createdOn: -1 }); // Fetch cars where the userId matches
+
+    if (cars.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "No cars found for this user",
+      });
+    }
+
+    return res.json({
+      error: false,
+      cars,
+      message: "Cars retrieved successfully",
     });
   } catch (error) {
     console.error("Error while fetching cars:", error);
@@ -375,6 +415,10 @@ app.get("/get-all-cars", authentificateToken, async (req, res) => {
     });
   }
 });
+
+
+
+/* */
 app.delete("/delete-car/:carId", authentificateToken, async (req, res) => {
   const carId = req.params.carId;
   const { userId } = req.user; // Get userId from the request
@@ -382,9 +426,15 @@ app.delete("/delete-car/:carId", authentificateToken, async (req, res) => {
   try {
     // Find the car by ID and ensure it belongs to the user
     const car = await Car.findOneAndDelete({ _id: carId, addedBy: userId });
-    
+
     if (!car) {
-      return res.status(404).json({ error: true, message: "Car not found or you don't have permission to delete this car" });
+      return res
+        .status(404)
+        .json({
+          error: true,
+          message:
+            "Car not found or you don't have permission to delete this car",
+        });
     }
 
     return res.json({ error: false, message: "Car deleted successfully" });
