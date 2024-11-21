@@ -11,32 +11,18 @@ import {
 import SignupForm from "./components/SignUp/Signup";
 import LoginForm from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/Footer";
-/* import AllUsersPage from "./components/AllUsers/GetAllUser";
- */ import MyCars from "./components/Admin/GetOwnCar";
-import EditCar from "./components/Admin/EditCar";
+import Home from "./components/Home/Home";
+import About from "./components/pages/About/About";
+import Contact from "./components/pages/Contact/Contact";
 
 function App() {
   return (
     <ChakraProvider>
       <Router>
+        {/* Navbar always present */}
         <Navbar />
         {/* Main Content */}
         <MainContent />
-
-        <Routes>
-          <Route path="/signup" element={<SignupForm />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/edit-car" element={<EditCar/>} />
-          {/* If you have more routes, add them here, e.g. */}
-          {/* <Route path="/allusers" element={<AllUsersPage />} /> */}
-        </Routes>
-        {/*         <AllUsersPage/>
-         */}
-        <MyCars />
-        <EditCar/>
-        {/* Footer only once */}
-        <Footer />
       </Router>
     </ChakraProvider>
   );
@@ -49,12 +35,21 @@ function MainContent() {
 
   return (
     <>
-      {!isAuthPage && (
-        <>
-          {/*           <AllUsersPage/>
-           */}{" "}
-        </>
-      )}
+      <Routes>
+        {/* Route for the Home page */}
+        <Route path="/" element={<Home />} />
+
+        {/* Routes for other pages */}
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+
+        {/* Add other routes as needed */}
+      </Routes>
+
+      {/* Footer only on non-auth pages */}
+      {!isAuthPage}
     </>
   );
 }

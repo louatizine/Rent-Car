@@ -1,24 +1,14 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Button } from "@chakra-ui/react"; // Import Button from Chakra UI
+import { useState } from "react";
+import { Button } from "@chakra-ui/react";
+import { useAuth } from "../../../Authen";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
 
   const openNav = () => {
     setNav(!nav);
-  };
-
-  // Check if the user is logged in when the component mounts
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!token); // If there's an access token, the user is logged in
-  }, []); // Empty dependency array to only run once when the component mounts
-
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken"); // Remove the token on logout
-    setIsLoggedIn(false); // Update the state to reflect that the user is logged out
   };
 
   return (
@@ -82,16 +72,6 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link className="testi-link" to="/testimonials">
-                Testimonials
-              </Link>
-            </li>
-            <li>
-              <Link className="team-link" to="/team">
-                Our Team
-              </Link>
-            </li>
-            <li>
               <Link className="contact-link" to="/contact">
                 Contact
               </Link>
@@ -113,7 +93,7 @@ function Navbar() {
                 <Link className="navbar__buttons__profile" to="/profile">
                   Profile
                 </Link>
-                <Button className="navbar__buttons__logout" onClick={handleLogout}>
+                <Button className="navbar__buttons__logout" onClick={logout}>
                   Logout
                 </Button>
               </>

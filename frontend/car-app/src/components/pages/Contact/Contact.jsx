@@ -1,29 +1,74 @@
-import { Box, Heading, Input, Textarea, Button, Stack, Container } from "@chakra-ui/react";
-import Back from "./Back";
-import img from "../../Assests/homeImage.png"; // Make sure to import your image here
+import Footer from "../../Footer/Footer";
+import HeroPages from "../../Hero/HeroPage";
 
-const Contact = () => {
+
+function Contact() {
   return (
     <>
-      <Box className="contact mb">
-        <Back name="Contact Us" title="Get Helps & Friendly Support" cover={img} />
-        <Container maxW="container.md" mt="8">
-          <Box as="form" p="8" boxShadow="lg" borderRadius="md" bg="white">
-            <Heading as="h4" size="md" mb="4">Fill up The Form</Heading>
-            <Stack spacing="4">
-              <Stack direction={{ base: "column", md: "row" }} spacing="4">
-                <Input placeholder="Name" size="md" />
-                <Input placeholder="Email" size="md" />
-              </Stack>
-              <Input placeholder="Subject" size="md" />
-              <Textarea placeholder="Your Message" rows={6} resize="vertical" />
-              <Button colorScheme="teal" size="md" mt="4">Submit Request</Button>
-            </Stack>
-          </Box>
-        </Container>
-      </Box>
+      <section className="contact-page">
+        <HeroPages name="Contact" />
+        <div className="container">
+          <div className="contact-div">
+            <div className="contact-div__text">
+              <h2>Need additional information?</h2>
+              <p>
+                A multifaceted professional skilled in multiple fields of
+                research, development as well as a learning specialist. Over 15
+                years of experience.
+              </p>
+              <a href="/">
+                <i className="fa-solid fa-phone"></i>&nbsp; (123) 456-7869
+              </a>
+              <a href="/">
+                <i className="fa-solid fa-envelope"></i>&nbsp;
+                carrental@xyz.com
+              </a>
+              <a href="/">
+                <i className="fa-solid fa-location-dot"></i>&nbsp; Bengaluru,
+                Karnatka
+              </a>
+            </div>
+            <div className="contact-div__form">
+              <form>
+                <label>
+                  Full Name <b>*</b>
+                </label>
+                <input type="text" placeholder='E.g: "Joe Shmoe"'></input>
+
+                <label>
+                  Email <b>*</b>
+                </label>
+                <input type="email" placeholder="youremail@example.com"></input>
+
+                <label>
+                  Tell us about it <b>*</b>
+                </label>
+                <textarea placeholder="Write Here.."></textarea>
+
+                <button type="submit">
+                  <i className="fa-solid fa-envelope-open-text"></i>&nbsp; Send
+                  Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div className="book-banner">
+          <div className="book-banner__overlay"></div>
+          <div className="container">
+            <div className="text-content">
+              <h2>Book a car by getting in touch with us</h2>
+              <span>
+                <i className="fa-solid fa-phone"></i>
+                <h3>(+126) 53 880 643</h3>
+              </span>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </section>
     </>
   );
-};
+}
 
 export default Contact;

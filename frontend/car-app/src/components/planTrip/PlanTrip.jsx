@@ -1,6 +1,6 @@
-/* import SelectCar from "../images/plan/icon1.png";
-import Contact from "../images/plan/icon2.png";
-import Drive from "../images/plan/icon3.png"; */
+ import SelectCar from "../../images/plan/icon1.png";
+import Contact from "../../images/plan/icon2.png";
+import Drive from "../../images/plan/icon3.png"; 
 
 function PlanTrip() {
   return (
@@ -15,8 +15,8 @@ function PlanTrip() {
 
             <div className="plan-container__boxes">
               <div className="plan-container__boxes__box">
-{/*                 <img src={SelectCar} alt="icon_img" />
- */}                <h3>Select Car</h3>
+{                 <img src={SelectCar} alt="icon_img" />
+ }                <h3>Select Car</h3>
                 <p>
                   We offers a big range of vehicles for all your driving needs.
                   We have the perfect car to meet your needs
@@ -24,8 +24,8 @@ function PlanTrip() {
               </div>
 
               <div className="plan-container__boxes__box">
-{/*                 <img src={Contact} alt="icon_img" />
- */}                <h3>Contact Operator</h3>
+{                 <img src={Contact} alt="icon_img" />
+ }                <h3>Contact Operator</h3>
                 <p>
                   Our knowledgeable and friendly operators are always ready to
                   help with any questions or concerns
@@ -33,8 +33,8 @@ function PlanTrip() {
               </div>
 
               <div className="plan-container__boxes__box">
-{/*                 <img src={Drive} alt="icon_img" />
- */}                <h3>Let&lsquo;s Drive</h3>
+{                 <img src={Drive} alt="icon_img" />
+ }                <h3>Let&lsquo;s Drive</h3>
                 <p>
                   Whether youre hitting the open road, weve got you covered
                   with our wide range of cars

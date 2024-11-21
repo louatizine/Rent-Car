@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-/* import BgShape from "../images/hero/hero-bg.png";
-import HeroCar from "../images/hero/main-car.png"; */
+import BgShape from "../../images/hero/hero-bg.png";
+import HeroCar from "../../images/hero/main-car.png";
 import { useEffect, useState } from "react";
 
 function Hero() {
@@ -34,8 +34,8 @@ function Hero() {
     <>
       <section id="home" className="hero-section">
         <div className="container">
-{/*           <img className="bg-shape" src={BgShape} alt="bg-shape" />
- */}          <div className="hero-content">
+          {<img className="bg-shape" src={BgShape} alt="bg-shape" />}{" "}
+          <div className="hero-content">
             <div className="hero-content__text">
               <h4>Plan your trip now</h4>
               <h1>
@@ -61,8 +61,8 @@ function Hero() {
 
             {/* img */}
             <img
-/*               src={HeroCar}
- */              alt="car-img"
+              src={HeroCar}
+              alt="car-img"
               className="hero-content__car-img"
             />
           </div>

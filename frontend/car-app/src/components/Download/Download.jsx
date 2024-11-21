@@ -1,5 +1,5 @@
-/* import Img1 from "../images/download/appstore.svg";
-import Img2 from "../images/download/googleapp.svg"; */
+ import Img1 from "../../images/download/appstore.svg";
+import Img2 from "../../images/download/googleapp.svg"; 
 
 function Download() {
   return (
@@ -14,8 +14,8 @@ function Download() {
               convinced. Led income months itself and houses you.
             </p>
             <div className="download-text__btns">
-            {/*   <img alt="download_img" src={Img2} />
-              <img alt="download_img" src={Img1} /> */}
+            {   <img alt="download_img" src={Img2} />}
+             {<img alt="download_img" src={Img1} />}  
             </div>
           </div>
         </div>
