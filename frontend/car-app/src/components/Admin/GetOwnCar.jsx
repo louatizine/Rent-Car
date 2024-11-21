@@ -16,7 +16,7 @@ import {
 const MyCars = () => {
   const [cars, setCars] = useState([]);
   const toast = useToast();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -67,53 +67,69 @@ const MyCars = () => {
   };
 
   return (
-    <Box maxW="1200px" mx="auto" p="4">
-      <Heading as="h2" mb="6" textAlign="center">
-        My Cars
-      </Heading>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      padding={{ base: "4", md: "6" }}
+    >
+      {/* Main content area */}
+      <Box flex="1">
+        <Heading as="h2" mb="6" textAlign="center" marginTop={50}>
+          My Cars
+        </Heading>
 
-      {/* Display cars in a grid */}
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="4">
-        {cars.length === 0 ? (
-          <Text>No cars available</Text>
-        ) : (
-          cars.map((car) => (
-            <Card key={car._id} boxShadow="md" borderRadius="md">
-              <Image
-                src={
-                  car.imageUrl || "https://via.placeholder.com/400"
-                }
-                alt={`${car.brand} ${car.model}`}
+        {/* Display cars in a responsive grid */}
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, md: 3, lg: 3 }}
+          spacing={{ base: "4", sm: "6", md: "8" }}
+          justifyItems="center"
+        >
+          {cars.length === 0 ? (
+            <Text>No cars available</Text>
+          ) : (
+            cars.map((car) => (
+              <Card
+                key={car._id}
+                boxShadow="md"
                 borderRadius="md"
-                objectFit="cover"
-                height="200px"
-              />
+                maxW="300px"
+                width="100%"
+                p="4"
+              >
+                <Image
+                  src={car.imageUrl || "https://via.placeholder.com/400"}
+                  alt={`${car.brand} ${car.model}`}
+                  borderRadius="md"
+                  objectFit="cover"
+                  height="200px"
+                />
 
-              <CardBody>
-                <Stack spacing="3">
-                  <Heading size="md">
-                    {car.brand} {car.model}
-                  </Heading>
-                  <Text>Year: {car.year}</Text>
-                  <Text>Price per day: ${car.pricePerDay}</Text>
-                  <Text>Location: {car.location}</Text>
-                </Stack>
-                <Button
-                  colorScheme="teal"
-                  mt="4"
-                  onClick={() => handleEditClick(car._id)}
-                >
-                  Edit
-                </Button>
+                <CardBody>
+                  <Stack spacing="3">
+                    <Heading size="md">
+                      {car.brand} {car.model}
+                    </Heading>
+                    <Text>Year: {car.year}</Text>
+                    <Text>Price per day: ${car.pricePerDay}</Text>
+                    <Text>Location: {car.location}</Text>
+                  </Stack>
+                  <Button
+                    colorScheme="teal"
+                    mt="4"
+                    onClick={() => handleEditClick(car._id)}
+                  >
+                    Edit
+                  </Button>
+                </CardBody>
+              </Card>
+            ))
+          )}
+        </SimpleGrid>
+      </Box>
 
-
-
-                
-              </CardBody>
-            </Card>
-          ))
-        )}
-      </SimpleGrid>
+      {/* Footer can be here or a different component */}
+      {/* If using a footer component, you can place it at the bottom */}
     </Box>
   );
 };

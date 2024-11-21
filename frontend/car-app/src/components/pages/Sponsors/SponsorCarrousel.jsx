@@ -2,10 +2,10 @@ import { Box, Container, Image } from "@chakra-ui/react";
 import Slider from "react-slick";
 
 // Import images from the local folder
-import img1 from '../Assests/logoTwo.png';
-import img2 from '../Assests/logoThree.png';
-import img3 from '../Assests/logoOne.png';
-import img4 from '../Assests/logoFour.png';
+import img1 from '../../Assests/ZineCompanyLogo.png';
+import img2 from '../../Assests/logoThree.png';
+import img3 from '../../Assests/logoOne.png';
+import img4 from '../../Assests/logoFour.png';
 
 
 

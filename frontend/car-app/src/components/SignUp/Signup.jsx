@@ -12,11 +12,11 @@ import {
 } from '@chakra-ui/react';
 
 const SignupForm = () => {
-  const [fullname, setFullname] = useState('');  
-  const [email, setEmail] = useState('');        
-  const [password, setPassword] = useState('');  
-  const [role, setRole] = useState('client');    
-  const toast = useToast();                       
+  const [fullname, setFullname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('client');
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/create-account', { 
+      const response = await fetch('http://localhost:8000/create-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,47 +81,56 @@ const SignupForm = () => {
   };
 
   return (
-    <Box width="400px" mx="auto" mt="50px">
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={4}>
-          <FormControl isRequired>
-            <FormLabel>Full Name</FormLabel>
-            <Input
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value)}
-              placeholder="Enter your full name"
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Email</FormLabel>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Role</FormLabel>
-            <Select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="client">Client</option>
-              <option value="agency">Agency</option>
-            </Select>
-          </FormControl>
-          <Button type="submit" colorScheme="teal" mt="4">
-            Sign Up
-          </Button>
-        </Stack>
-      </form>
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="calc(100vh - 200px)" // Adjusts the height to place form between navbar and footer
+      mt="50px"
+    >
+      <Box width="400px">
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={4}>
+            <FormControl isRequired>
+              <FormLabel>Full Name</FormLabel>
+              <Input
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
+                placeholder="Enter your full name"
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Password</FormLabel>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Role</FormLabel>
+              <Select value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="client">Client</option>
+                <option value="agency">Agency</option>
+              </Select>
+            </FormControl>
+            <Button type="submit" colorScheme="teal" mt="4">
+              Sign Up
+            </Button>
+          </Stack>
+        </form>
+      </Box>
     </Box>
   );
 };

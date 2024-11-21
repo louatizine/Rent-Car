@@ -1,6 +1,6 @@
 import { Box, Heading, Input, Textarea, Button, Stack, Container } from "@chakra-ui/react";
 import Back from "./Back";
-import img from "../Assests/homeImage.png"; // Make sure to import your image here
+import img from "../../Assests/homeImage.png"; // Make sure to import your image here
 
 const Contact = () => {
   return (

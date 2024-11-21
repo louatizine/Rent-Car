@@ -71,7 +71,7 @@ const LoginForm = () => {
         console.log(data.role);
         navigate('/allusers');
       } else {
-        navigate('/home'); 
+        navigate('/home');
       }
 
     } catch (error) {
@@ -87,32 +87,41 @@ const LoginForm = () => {
   };
 
   return (
-    <Box width="400px" mx="auto" mt="50px">
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={4}>
-          <FormControl isRequired>
-            <FormLabel>Email</FormLabel>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
-          </FormControl>
-          <Button type="submit" colorScheme="teal" mt="4">
-            Login
-          </Button>
-        </Stack>
-      </form>
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="calc(100vh - 200px)" // Ensures form is between navbar and footer
+      mt="50px"
+    >
+      <Box width="400px">
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={4}>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Password</FormLabel>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+              />
+            </FormControl>
+            <Button type="submit" colorScheme="teal" mt="4">
+              Login
+            </Button>
+          </Stack>
+        </form>
+      </Box>
     </Box>
   );
 };
