@@ -20,6 +20,8 @@ const Car = require("./models/CarModel");
 const express = require("express");
 const cors = require("cors");
 const app = express();
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 
 const jwt = require("jsonwebtoken");
 const { authentificateToken } = require("./utilities");
@@ -34,7 +36,7 @@ app.use(
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "uploads");
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -322,7 +324,7 @@ app.put("/edit-car/:carId", authentificateToken, async (req, res) => {
   }
 
   try {
-    const car = await Car.findOne({ _id: carId, addedBy: userId }); // Ensure the car belongs to the user
+    const car = await Car.findOne({ _id: carId });
 
     if (!car) {
       return res
@@ -416,6 +418,21 @@ app.get("/get-all-cars", authentificateToken, async (req, res) => {
   }
 });
 
+app.get('/get-car/:carId', async (req, res) => {
+  const { carId } = req.params;
+
+  try {
+    const car = await Car.findById(carId);
+    if (!car) {
+      return res.status(404).json({ message: 'Car not found' });
+    }
+    res.status(200).json({ car });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 
 /* */
@@ -425,7 +442,7 @@ app.delete("/delete-car/:carId", authentificateToken, async (req, res) => {
 
   try {
     // Find the car by ID and ensure it belongs to the user
-    const car = await Car.findOneAndDelete({ _id: carId, addedBy: userId });
+    const car = await Car.findOneAndDelete({ _id: carId });
 
     if (!car) {
       return res
@@ -443,6 +460,7 @@ app.delete("/delete-car/:carId", authentificateToken, async (req, res) => {
     return res.status(500).json({ error: true, message: "Server error" });
   }
 });
+
 
 app.listen(8000, () => {
   console.log("Server running on port 8000");

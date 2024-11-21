@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Use useNavigate for routing
+import { useParams, useNavigate } from 'react-router-dom'; 
 import { Box, FormControl, FormLabel, Input, Button, Textarea, Select, Checkbox, useToast } from '@chakra-ui/react';
 
 const EditCar = () => {
@@ -24,52 +24,46 @@ const EditCar = () => {
   const toast = useToast();
 
   useEffect(() => {
-    // Fetch car details when the component mounts
     const fetchCarDetails = async () => {
-        const token = localStorage.getItem("accessToken");
-      
-        if (!token) {
-          toast({
-            title: "Error",
-            description: "You must be logged in to edit a car.",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
-          return;
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to edit a car.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:8000/get-car/${carId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || "Failed to fetch car details");
         }
-      
-        try {
-          const response = await fetch(`http://localhost:8000/get-car/${carId}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`, // Pass token in Authorization header
-            },
-          });
-      
-          // Log the response for debugging
-          console.log('Response Status:', response.status);
-          console.log('Response Body:', await response.text()); // Log the body before attempting to parse
-      
-          if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(errorResponse.message || "Failed to fetch car details");
-          }
-      
-          const result = await response.json();
-          setCarDetails(result.car); // Update the state with the fetched car details
-        } catch (error) {
-          console.error('Error fetching car details:', error); // Log error for debugging
-          toast({
-            title: "Error fetching car details",
-            description: error.message,
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
-        }
-      };
-      
+
+        const result = await response.json();
+        setCarDetails(result.car); // Update the state with the fetched car details
+      } catch (error) {
+        toast({
+          title: "Error fetching car details",
+          description: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    };
+
     fetchCarDetails();
   }, [carId, toast]);
 
@@ -121,11 +115,58 @@ const EditCar = () => {
         isClosable: true,
       });
 
-      // Redirect to the list of cars after success
-      navigate('/my-cars'); // Use navigate for routing
+      navigate('/owncar'); // Redirect to the list of cars after success
     } catch (error) {
       toast({
         title: "Error updating car",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleDeleteCar = async () => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to delete the car.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/delete-car/${carId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to delete car");
+      }
+
+      toast({
+        title: "Car deleted",
+        description: result.message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      navigate('/owncar'); // Redirect after deletion
+    } catch (error) {
+      toast({
+        title: "Error deleting car",
         description: error.message,
         status: "error",
         duration: 3000,
@@ -278,6 +319,15 @@ const EditCar = () => {
 
         <Button colorScheme="teal" type="submit">
           Update Car
+        </Button>
+
+        <Button 
+          colorScheme="red" 
+          onClick={handleDeleteCar} 
+          ml="4" 
+          isLoading={false} // You can toggle loading state during the request
+        >
+          Delete Car
         </Button>
       </form>
     </Box>
