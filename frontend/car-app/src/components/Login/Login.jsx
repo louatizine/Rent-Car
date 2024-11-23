@@ -69,7 +69,7 @@ const LoginForm = () => {
         navigate('/addv');
       } else if (data.role === 'client') {
         console.log(data.role);
-        navigate('/allusers');
+        navigate('/home');
       } else {
         navigate('/home');
       }

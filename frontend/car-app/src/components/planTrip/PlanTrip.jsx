@@ -1,6 +1,6 @@
- import SelectCar from "../../images/plan/icon1.png";
+import SelectCar from "../../images/plan/icon1.png";
 import Contact from "../../images/plan/icon2.png";
-import Drive from "../../images/plan/icon3.png"; 
+import Drive from "../../images/plan/icon3.png";
 
 function PlanTrip() {
   return (
@@ -9,35 +9,29 @@ function PlanTrip() {
         <div className="container">
           <div className="plan-container">
             <div className="plan-container__title">
-              <h3>Plan your trip now</h3>
+              <h3> Our Services</h3>
               <h2>Quick & easy car rental</h2>
             </div>
 
             <div className="plan-container__boxes">
               <div className="plan-container__boxes__box">
-{                 <img src={SelectCar} alt="icon_img" />
- }                <h3>Select Car</h3>
+                {<img src={SelectCar} alt="icon_img" />} <h3>Car Inspection</h3>
                 <p>
-                  We offers a big range of vehicles for all your driving needs.
-                  We have the perfect car to meet your needs
+                At Zine Cars, we provide comprehensive car inspections to ensure the highest standards of safety and performance.
                 </p>
               </div>
 
               <div className="plan-container__boxes__box">
-{                 <img src={Contact} alt="icon_img" />
- }                <h3>Contact Operator</h3>
+                {<img src={Contact} alt="icon_img" />} <h3>Car Financing</h3>
                 <p>
-                  Our knowledgeable and friendly operators are always ready to
-                  help with any questions or concerns
+                Explore flexible car finance options at Zine Cars, tailored to suit your budget and make owning your dream car easy.
                 </p>
               </div>
 
               <div className="plan-container__boxes__box">
-{                 <img src={Drive} alt="icon_img" />
- }                <h3>Let&lsquo;s Drive</h3>
+                {<img src={Drive} alt="icon_img" />} <h3>Car Rental</h3>
                 <p>
-                  Whether youre hitting the open road, weve got you covered
-                  with our wide range of cars
+                Zine Cars offers a premium selection of luxury vehicles for rent, ensuring convenience, style, and exceptional customer service.
                 </p>
               </div>
             </div>

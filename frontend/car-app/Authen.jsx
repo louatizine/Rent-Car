@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from "prop-types";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -9,24 +9,22 @@ export const AuthProvider = ({ children }) => {
   const login = (token) => {
     localStorage.setItem("accessToken", token);
     setIsLoggedIn(true);
-    window.dispatchEvent(new Event("storage")); // Trigger a storage event
   };
 
   const logout = () => {
     localStorage.removeItem("accessToken");
     setIsLoggedIn(false);
-    window.dispatchEvent(new Event("storage")); // Trigger a storage event
   };
 
   useEffect(() => {
-    const syncAuthState = () => {
+    const handleStorageChange = () => {
       setIsLoggedIn(!!localStorage.getItem("accessToken"));
     };
 
-    window.addEventListener("storage", syncAuthState);
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener("storage", syncAuthState);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
@@ -37,4 +35,10 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// Define prop types for the component
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+// Custom hook for accessing auth context
 export const useAuth = () => useContext(AuthContext);

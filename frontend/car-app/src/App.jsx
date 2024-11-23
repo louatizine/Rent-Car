@@ -14,6 +14,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import About from "./components/pages/About/About";
 import Contact from "./components/pages/Contact/Contact";
+import MyCars from "./components/Admin/GetOwnCar"
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function MainContent() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-
+        <Route path="/cars" element={<MyCars />} />
         {/* Add other routes as needed */}
       </Routes>
 

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useAuth } from "../../../Authen";
+import Logo from "../../images/logo/logo.png";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
@@ -9,6 +10,11 @@ function Navbar() {
 
   const openNav = () => {
     setNav(!nav);
+  };
+
+  const handleLogout = () => {
+    logout();
+    window.location.reload(); // Reload to update UI
   };
 
   return (
@@ -52,7 +58,7 @@ function Navbar() {
         <div className="navbar">
           <div className="navbar__img">
             <Link to="/" onClick={() => window.scrollTo(0, 0)}>
-              {/* Add your logo here */}
+              <img src={Logo} alt="logo-img" />
             </Link>
           </div>
           <ul className="navbar__links">
@@ -67,7 +73,7 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link className="models-link" to="/models">
+              <Link className="models-link" to="/cars">
                 Vehicle Models
               </Link>
             </li>
@@ -93,7 +99,11 @@ function Navbar() {
                 <Link className="navbar__buttons__profile" to="/profile">
                   Profile
                 </Link>
-                <Button className="navbar__buttons__logout" onClick={logout}>
+                <Button
+                  className="navbar__buttons__logout"
+                  colorScheme="teal"
+                  onClick={handleLogout}
+                >
                   Logout
                 </Button>
               </>
