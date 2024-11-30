@@ -1,107 +1,109 @@
-import { useState } from "react";
-import { CAR_DATA } from "./CarData";
-import CarBox from "./CarBox";
+import { useState, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
+import CarBox from "./CarBox"; // Import CarBox
 
 function PickCar() {
-  const [active, setActive] = useState("SecondCar");
-  const [colorBtn, setColorBtn] = useState("btn1");
+  const [activeCar, setActiveCar] = useState(null);  // Keep track of the active car
+  const [cars, setCars] = useState([]);
+  const [colorBtn, setColorBtn] = useState("");  // Track the active button for coloring
+  const toast = useToast();
 
-  const btnID = (id) => {
-    setColorBtn(colorBtn === id ? "" : id);
+  useEffect(() => {
+    const fetchCars = async () => {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to view your cars.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8000/get-all-cars", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || "Failed to fetch cars");
+        }
+
+        const result = await response.json();
+        setCars(result.cars);  // Set all cars
+      } catch (error) {
+        toast({
+          title: "Error fetching cars.",
+          description: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    };
+
+    fetchCars();
+  }, [toast]);
+
+  const handleCarClick = (carID, btnID) => {
+    setActiveCar(carID);  // Set the clicked car as active
+    setColorBtn(btnID);    // Set the active button color
   };
 
+  // Function to determine the button's active state for styling
   const coloringButton = (id) => {
     return colorBtn === id ? "colored-button" : "";
   };
 
   return (
-    <>
-      <section className="pick-section">
-        <div className="container">
-          <div className="pick-container">
-            <div className="pick-container__title">
-              <h3>Vehicle Models</h3>
-              <h2>Our rental fleet</h2>
-              <p>
-                Choose from a variety of our amazing vehicles to rent for your
-                next adventure or business trip
-              </p>
-            </div>
-            <div className="pick-container__car-content">
-              {/* pick car */}
-              <div className="pick-box">
-                <button
-                  className={`${coloringButton("btn1")}`}
-                  onClick={() => {
-                    setActive("SecondCar");
-                    btnID("btn1");
-                  }}
-                >
-                  Audi A1 S-Line
-                </button>
-                <button
-                  className={`${coloringButton("btn2")}`}
-                  id="btn2"
-                  onClick={() => {
-                    setActive("FirstCar");
-                    btnID("btn2");
-                  }}
-                >
-                  VW Golf 6
-                </button>
-                <button
-                  className={`${coloringButton("btn3")}`}
-                  id="btn3"
-                  onClick={() => {
-                    setActive("ThirdCar");
-                    btnID("btn3");
-                  }}
-                >
-                  Toyota Camry
-                </button>
-                <button
-                  className={`${coloringButton("btn4")}`}
-                  id="btn4"
-                  onClick={() => {
-                    setActive("FourthCar");
-                    btnID("btn4");
-                  }}
-                >
-                  BMW 320 ModernLine
-                </button>
-                <button
-                  className={`${coloringButton("btn5")}`}
-                  id="btn5"
-                  onClick={() => {
-                    setActive("FifthCar");
-                    btnID("btn5");
-                  }}
-                >
-                  Mercedes-Benz GLK
-                </button>
-                <button
-                  className={`${coloringButton("btn6")}`}
-                  id="btn6"
-                  onClick={() => {
-                    setActive("SixthCar");
-                    btnID("btn6");
-                  }}
-                >
-                  VW Passat CC
-                </button>
-              </div>
+    <section className="pick-section">
+      <div className="container">
+        <div className="pick-container">
+          <div className="pick-container__title">
+            <h3>Vehicle Models</h3>
+            <h2>Our rental fleet</h2>
+            <p>
+              Choose from a variety of our amazing vehicles to rent for your
+              next adventure or business trip.
+            </p>
+          </div>
 
-              {active === "FirstCar" && <CarBox data={CAR_DATA} carID={0} />}
-              {active === "SecondCar" && <CarBox data={CAR_DATA} carID={1} />}
-              {active === "ThirdCar" && <CarBox data={CAR_DATA} carID={2} />}
-              {active === "FourthCar" && <CarBox data={CAR_DATA} carID={3} />}
-              {active === "FifthCar" && <CarBox data={CAR_DATA} carID={4} />}
-              {active === "SixthCar" && <CarBox data={CAR_DATA} carID={5} />}
+          <div className="pick-container__car-content">
+            {/* Pick car buttons */}
+            <div className="pick-box">
+              {cars.length > 0 ? (
+                cars.map((car, index) => (
+                  <button
+                    key={car._id}
+                    className={`${coloringButton(`btn${index + 1}`)}`}
+                    onClick={() => handleCarClick(car._id, `btn${index + 1}`)}
+                  >
+                    {car.brand} {car.model}
+                  </button>
+                ))
+              ) : (
+                <p>Loading cars...</p>
+              )}
             </div>
+
+            {/* Show CarBox only if a car is selected */}
+            {activeCar && (
+              <div className="car-details">
+                <h3>Picked Car</h3> {/* Header to indicate the selected car */}
+                <CarBox carID={activeCar} cars={cars} />
+              </div>
+            )}
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 
